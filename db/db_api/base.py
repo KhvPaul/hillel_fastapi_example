@@ -2,7 +2,7 @@ import copy
 import typing as t
 
 from asyncpg import exceptions as ae
-from sqlalchemy import delete, desc, exc as sa_exc, future, orm, update
+from sqlalchemy import delete, desc, exc as sa_exc, future, orm, update, text
 from sqlalchemy.ext import asyncio as sa_asyncio
 
 from logger import logger
@@ -52,6 +52,11 @@ class BaseDbApiHandler:
     @classmethod
     async def commit(cls, session: sa_asyncio.AsyncSession):
         await cls._commit(session)
+
+    @classmethod
+    async def ping(cls, session_cls: sa_asyncio.AsyncSession):
+        async with session_cls() as session:
+            await cls._execute(session, text('SELECT 1'))
 
 
 class DBApiBase(BaseDbApiHandler):

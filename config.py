@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     DB_NAME: str = "db"
     DATABASE_ENDPOINT: PostgresDsn | None
 
+    DATABASE_MAX_CONNECTIONS: int = 10
+    DATABASE_CONNECTION_RECYCLE: int = 3600
+
     @validator("DATABASE_ENDPOINT", pre=True)
     def assemble_db_connection(cls, v: str | None, values: Dict[str, Any]) -> Any:  # noqa: N805
         if isinstance(v, str):

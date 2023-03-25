@@ -15,8 +15,8 @@ generate_uuid = lambda: _uuid()  # noqa
 class User(Base):
     __tablename__ = "users"
 
-    id = sa.Column(  # noqa: A003
-        "id",
+    sub = sa.Column(
+        "sub",
         sa.String(48),
         unique=True,
         nullable=False,
@@ -32,9 +32,9 @@ class User(Base):
 class UserProfile(Base):
     __tablename__ = "user_profiles"
 
-    user_id = sa.Column(
-        "user_id",
-        sa.ForeignKey("users.id", ondelete="CASCADE"),
+    user_sub = sa.Column(
+        "user_sub",
+        sa.ForeignKey("users.sub", ondelete="CASCADE"),
         unique=True,
         nullable=False,
         primary_key=True,

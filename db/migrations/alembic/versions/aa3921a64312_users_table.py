@@ -19,12 +19,12 @@ depends_on = None
 def upgrade() -> None:
     op.create_table(
         "users",
-        sa.Column("id", sa.String(length=48), nullable=False),
+        sa.Column("sub", sa.String(length=48), nullable=False),
         sa.Column("email", sa.String(length=320), nullable=False),
         sa.Column("password", sa.Text, nullable=False),
 
-        sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("id"),
+        sa.PrimaryKeyConstraint("sub"),
+        sa.UniqueConstraint("sub"),
     )
 
 

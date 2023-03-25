@@ -19,7 +19,7 @@ depends_on = None
 def upgrade() -> None:
     op.create_table(
         "user_profiles",
-        sa.Column("user_id", sa.String(length=48), nullable=False),
+        sa.Column("user_sub", sa.String(length=48), nullable=False),
         sa.Column("first_name", sa.String(length=255), nullable=False),
         sa.Column("last_name", sa.String(length=255), nullable=False),
         sa.Column("birthday", sa.DATE(), nullable=False),
@@ -37,9 +37,9 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(), nullable=True),
         sa.Column("updated_at", sa.DateTime(), nullable=True),
 
-        sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
-        sa.PrimaryKeyConstraint("user_id"),
-        sa.UniqueConstraint("user_id"),
+        sa.ForeignKeyConstraint(["user_sub"], ["users.sub"], ondelete="CASCADE"),
+        sa.PrimaryKeyConstraint("user_sub"),
+        sa.UniqueConstraint("user_sub"),
     )
 
 

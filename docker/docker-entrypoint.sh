@@ -6,7 +6,7 @@ cmd="$*"
 
 postgres_ready () {
   # Check that postgres is ready:
-  sh 'wait-for-command.sh' -t 5 -s 0 52 -c "curl $DB_WRITING_HOST:$DB_PORT"
+  sh 'docker/wait-for-command.sh' -t 5 -s 0 52 -c "curl $DB_HOST:$DB_PORT"
 }
 
 # We need this line to make sure that this container is started

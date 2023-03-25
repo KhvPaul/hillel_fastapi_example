@@ -1,4 +1,6 @@
-from pydantic import BaseSettings, FilePath
+from typing import Any, Dict
+
+from pydantic import BaseSettings, FilePath, PostgresDsn, RedisDsn, validator
 
 
 class Settings(BaseSettings):
@@ -6,7 +8,39 @@ class Settings(BaseSettings):
 
     LOG_LEVEL: str = "DEBUG"
 
-    DESCRIPTION_FILE: FilePath | None = "DESCRIPTION.md"
+    DESCRIPTION_FILE: FilePath | None
+
+    # database
+    DB_USER: str = "postgres"
+    DB_PASSWORD: str = "postgres"
+    DB_HOST: str = "localhost"
+    DB_PORT: int = 5432
+    DB_NAME: str = "db"
+    DATABASE_ENDPOINT: PostgresDsn | None
+
+    @validator("DATABASE_ENDPOINT", pre=True)
+    def assemble_db_connection(cls, v: str | None, values: Dict[str, Any]) -> Any:  # noqa: N805
+        if isinstance(v, str):
+            return v
+        return PostgresDsn.build(
+            scheme="postgresql+asyncpg",
+            user=values.get("DB_USER"),
+            password=values.get("DB_PASSWORD"),
+            host=values.get("DB_HOST"),
+            port=str(values.get("DB_PORT")),
+            path=f"/{values.get('DB_NAME') or ''}",
+        )
+
+    # redis
+    REDIS_HOST: str = "redis_db"
+    REDIS_PORT: int = 6379
+    REDIS_URL: RedisDsn | None
+
+    @validator("REDIS_URL", pre=True)
+    def assemble_redis_connection(cls, v: str | None, values: Dict[str, Any]) -> Any:  # noqa: N805
+        if isinstance(v, str):
+            return v
+        return RedisDsn.build(scheme="redis", host=values.get("REDIS_HOST"), port=str(values.get("REDIS_PORT")))
 
     class Config:
         case_sensitive = True

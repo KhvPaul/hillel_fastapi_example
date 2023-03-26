@@ -26,7 +26,7 @@ ENV PATH="${PYTHONPATH}/bin:${PATH}"
 COPY . /home/appuser/app
 WORKDIR /home/appuser/app
 
-RUN chmod +x docker/runserver.sh docker/wait-for-command.sh docker/docker-entrypoint.sh
+RUN chmod +x docker/runserver.sh docker/wait-for-command.sh docker/docker-entrypoint.sh create_admin.py
 USER appuser
 
 EXPOSE 8000

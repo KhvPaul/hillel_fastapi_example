@@ -14,6 +14,21 @@ _uuid = lambda: uuid.uuid4().hex  # noqa future workpiece for function
 generate_uuid = lambda: _uuid()  # noqa
 
 
+class Admin(Base):
+    __tablename__ = "admins"
+
+    sub = sa.Column(
+        "sub",
+        sa.String(48),
+        unique=True,
+        nullable=False,
+        primary_key=True,
+        default=_uuid,
+    )
+    email = sa.Column("email", sa.String(320), unique=True, nullable=False)
+    password = sa.Column("password", sa.Text, nullable=False)
+
+
 class User(Base):
     __tablename__ = "users"
 

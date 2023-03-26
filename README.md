@@ -25,6 +25,6 @@ Example project for hillel IT school.
     ```
   * If you run application locally:
     * Make sure you have exported all virtual environment variables
-    ```
-    python python create_admin.py admin@noreply.com admin
+    ```bash 
+    python create_admin.py admin@noreply.com admin
     ```

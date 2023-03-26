@@ -42,6 +42,7 @@ class User(Base):
     )
     email = sa.Column("email", sa.String(320), unique=True, nullable=False)
     password = sa.Column("password", sa.Text, nullable=False)
+    user_role = sa.Column("user_role", sa.Enum(enums.UserRoles), nullable=False)
 
     profile = relationship("UserProfile", uselist=False, viewonly=True)
 

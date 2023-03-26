@@ -19,7 +19,7 @@ async def main():
     email: EmailStr = EmailStr(sys.argv[1])
     password: str = sys.argv[2]
     await create_super_user(email, password)
-    print("Admin created successfully!")
+    print("Admin created successfully!")  # noqa: T201
 
 
 if __name__ == "__main__":

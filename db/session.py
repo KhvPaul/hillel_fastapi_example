@@ -12,12 +12,12 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def create_async_engine() -> sa_asyncio.AsyncEngine:
     return sa_asyncio.create_async_engine(
-            settings.DATABASE_ENDPOINT,
-            echo=False,
-            pool_size=int(settings.DATABASE_MAX_CONNECTIONS) * 0.9,
-            max_overflow=int(settings.DATABASE_MAX_CONNECTIONS) * 0.1,
-            pool_recycle=int(settings.DATABASE_CONNECTION_RECYCLE),
-        )
+        settings.DATABASE_ENDPOINT,
+        echo=False,
+        pool_size=int(settings.DATABASE_MAX_CONNECTIONS) * 0.9,
+        max_overflow=int(settings.DATABASE_MAX_CONNECTIONS) * 0.1,
+        pool_recycle=int(settings.DATABASE_CONNECTION_RECYCLE),
+    )
 
 
 @contextlib.asynccontextmanager

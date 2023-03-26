@@ -2,9 +2,11 @@ import http
 import os
 
 from fastapi import FastAPI
+from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import JSONResponse
 from uvicorn import Config, Server
 
+from admin.admin_interface import AdminApplicationBuilder
 from config import settings
 from pydentic_models.common import ResponseOk
 from routers import user_controllers
@@ -14,6 +16,9 @@ OK = {"message": "OK"}
 OK_RESPONSE = JSONResponse(content=OK, status_code=http.HTTPStatus.OK)
 
 app = FastAPI(description=helpers.get_description_file(), docs_url="/")
+app = AdminApplicationBuilder(app)()
+
+app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 
 app.mount("/v1/user", user_controllers.router, "user")
 

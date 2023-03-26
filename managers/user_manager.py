@@ -40,7 +40,7 @@ class UserModelManager(BaseModelManager):
             raise custom_exc.InvalidUserCredentialsException()
         if not self.compare_hashes(sign_up_data.password, user.password):
             raise custom_exc.InvalidUserCredentialsException()
-        access_token = UserAuthHandler.generate_access_token(user)
+        access_token = self._auth_handler.generate_access_token(user)
         await self._auth_handler.save_access_token(access_token)
         return {"access_token": access_token, "token_type": "bearer"}
 

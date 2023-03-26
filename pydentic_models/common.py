@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class ResponseBaseModel(BaseModel):
@@ -8,3 +8,13 @@ class ResponseBaseModel(BaseModel):
 
 class ResponseOk(ResponseBaseModel):
     message: str = "OK"
+
+
+class SignUpRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class SignUpResp(ResponseBaseModel):
+    access_token: str
+    token_type: str

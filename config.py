@@ -8,6 +8,9 @@ class Settings(BaseSettings):
 
     LOG_LEVEL: str = "DEBUG"
 
+    SECRET_KEY: bytes
+    ALGORITHM: str
+
     DESCRIPTION_FILE: FilePath | None
 
     # database

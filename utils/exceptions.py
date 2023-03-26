@@ -17,3 +17,35 @@ class SomethingWentWrongException(HTTPException):
             status_code=http.HTTPStatus.UNPROCESSABLE_ENTITY,
             detail="Something went wrong",
         )
+
+
+class InvalidUserCredentialsException(HTTPException):
+    def __init__(self):
+        super(HTTPException, self).__init__(
+            status_code=http.HTTPStatus.UNPROCESSABLE_ENTITY,
+            detail="Invalid user credentials",
+        )
+
+
+class ErrorTokenValidation(HTTPException):
+    def __init__(self):
+        super(HTTPException, self).__init__(
+            status_code=http.HTTPStatus.UNAUTHORIZED,
+            detail="Error token validation",
+        )
+
+
+class ErrorCredentialsValidation(HTTPException):
+    def __init__(self):
+        super(HTTPException, self).__init__(
+            status_code=http.HTTPStatus.FORBIDDEN,
+            detail="Could not validate credentials",
+        )
+
+
+class BirthDateInFutureException(HTTPException):
+    def __init__(self):
+        super(HTTPException, self).__init__(
+            status_code=http.HTTPStatus.UNPROCESSABLE_ENTITY,
+            detail="Birth date can't be in future",
+        )

@@ -25,6 +25,7 @@ def upgrade() -> None:
 
         sa.PrimaryKeyConstraint("sub"),
         sa.UniqueConstraint("sub"),
+        sa.UniqueConstraint("email"),
     )
 
 

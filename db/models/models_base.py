@@ -1,7 +1,9 @@
 import datetime
+import uuid
 
 import sqlalchemy as sa
 from sqlalchemy.ext import declarative
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
 from pydentic_models import enums
@@ -47,4 +49,17 @@ class UserProfile(Base):
     created_at = sa.Column("created_at", sa.DateTime, default=datetime.datetime.utcnow)
     updated_at = sa.Column(
         "updated_at", sa.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
+    )
+
+    @hybrid_property
+    def email(self) -> str:
+        return self.user.email
+
+    user = relationship(
+        "User",
+        lazy="joined",
+        foreign_keys=[user_sub],
+        primaryjoin="User.sub == UserProfile.user_sub",
+        viewonly=True,
+        uselist=False,
     )

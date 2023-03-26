@@ -29,7 +29,7 @@ def upgrade() -> None:
                 "Male",
                 "Female",
                 "Other",
-                name="gender",
+                name="genders",
             ),
             nullable=False
         ),
@@ -45,4 +45,4 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.drop_table("user_profiles")
-    op.execute("DROP TYPE gender;")
+    op.execute("DROP TYPE genders;")

@@ -9,7 +9,7 @@ from uvicorn import Config, Server
 from admin.admin_interface import AdminApplicationBuilder
 from config import settings
 from pydentic_models.common import ResponseOk
-from routers import user_controllers
+from routers import customer_controllers, seller_controllers
 from utils import annotations, helpers
 
 OK = {"message": "OK"}
@@ -20,7 +20,8 @@ app = AdminApplicationBuilder(app)()
 
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 
-app.mount("/v1/user", user_controllers.router, "user")
+app.mount("/api/v1/customer", customer_controllers.router, "customer")
+app.mount("/api/v1/seller", seller_controllers.router, "seller")
 
 
 @app.get(

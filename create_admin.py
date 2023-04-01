@@ -5,6 +5,7 @@ from pydantic import EmailStr
 
 from db.session import get_async_postgres_session
 from managers.admin_manager import AdminModelManager
+from pydentic_models import common as pyd_mod_common
 
 
 admin = AdminModelManager()
@@ -12,7 +13,7 @@ admin = AdminModelManager()
 
 async def create_super_user(email: EmailStr, password: str):
     async with get_async_postgres_session() as session_cls:
-        await admin.create_admin(email, password, session_cls)
+        await admin.create_user(pyd_mod_common.SignUpRequest(email=email, password=password), session_cls)
 
 
 async def main():

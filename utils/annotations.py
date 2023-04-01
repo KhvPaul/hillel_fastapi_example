@@ -4,10 +4,10 @@ from fastapi import Depends, Header
 from sqlalchemy.ext import asyncio as sa_asyncio
 
 from db.session import get_async_postgres_session
-from dependencies.user_auth import UserAuthHandler
+from dependencies.auth import AuthHandler
 from utils import redis_api as redis
 
-user_auth_handler = UserAuthHandler()
+user_auth_handler = AuthHandler()
 
 
 async def get_async_db_session() -> sa_asyncio.AsyncSession:

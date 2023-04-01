@@ -4,9 +4,13 @@ import typing as t
 from asyncpg import exceptions as ae
 from sqlalchemy import delete, desc, exc as sa_exc, future, orm, text, update
 from sqlalchemy.ext import asyncio as sa_asyncio
+from sqlalchemy.orm import declarative_base
 
 from logger import logger
 from utils import exceptions as custom_exc
+
+
+Base = declarative_base()
 
 
 class BaseDbApiHandler:
@@ -60,7 +64,7 @@ class BaseDbApiHandler:
 
 
 class DBApiBase(BaseDbApiHandler):
-    model = None
+    model: Base = None
     pk_filed = ""
 
     @classmethod

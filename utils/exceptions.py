@@ -49,3 +49,11 @@ class BirthDateInFutureException(HTTPException):
             status_code=http.HTTPStatus.UNPROCESSABLE_ENTITY,
             detail="Birth date can't be in future",
         )
+
+
+class AccessDenied(HTTPException):
+    def __init__(self):
+        super(HTTPException, self).__init__(
+            status_code=http.HTTPStatus.FORBIDDEN,
+            detail="You don't have permission to access callable information",
+        )

@@ -34,6 +34,7 @@ class ProductAdminView(ModelView, model=Product):
 
 
 class CategoryAdminView(ModelView, model=Category):
+    name_plural = "Categories"
     column_list = (Category.pk, Category.name)
 
 

@@ -1,20 +1,20 @@
 import http
 import typing as t
 
-from fastapi import Body, FastAPI, Header
+from fastapi import Body, FastAPI, Header, Security
 from fastapi.responses import JSONResponse
 
-from managers.user_manager import UserModelManager
+from managers.seller_manager import SellerModelManager
 from pydentic_models import common as pyd_mod_common, users as pyd_mod_users
 from utils import helpers
-from utils.annotations import AsyncSession, Sub
-
+from utils.annotations import AsyncSession
+from utils.security import get_sub_checker
 
 OK = {"message": "OK"}
 OK_RESPONSE = JSONResponse(content=OK, status_code=http.HTTPStatus.CREATED)
 router = FastAPI(description=helpers.get_description_file(), docs_url="/docs")
 
-user = UserModelManager()
+seller = SellerModelManager()
 
 
 @router.post(
@@ -24,9 +24,9 @@ user = UserModelManager()
 )
 async def sign_up(
     session_cls: AsyncSession,
-    sign_up_data: pyd_mod_common.SignUpRequest = Body(...),
+    sign_up_data: pyd_mod_users.UserSignUpRequest = Body(...),
 ):
-    return await user.create_user(sign_up_data, session_cls)
+    return await seller.create_user(sign_up_data, session_cls)
 
 
 @router.post(
@@ -38,7 +38,7 @@ async def sign_in(
     session_cls: AsyncSession,
     sign_in_data: pyd_mod_common.SignUpRequest = Body(...),
 ):
-    return await user.sign_in(sign_in_data, session_cls)
+    return await seller.sign_in(sign_in_data, session_cls)
 
 
 @router.post(
@@ -47,23 +47,13 @@ async def sign_in(
     tags=["Registration Authorization"],
 )
 async def log_out(id_token: str = Header(...)):
-    await user.log_out(id_token)
+    await seller.log_out(id_token)
     return OK
 
 
-@router.get("/get_profile/", tags=["User Profile"], response_model=t.Optional[pyd_mod_users.UserProfileResponse])
+@router.get("/get_profile/", tags=["User Profile"], response_model=t.Optional[pyd_mod_users.UserResponse])
 async def get_profile(
-    sub: Sub,
     session_cls: AsyncSession,
+    sub: str = Security(get_sub_checker, scopes=["seller"]),
 ):
-    return await user.retrieve_user_profile(sub, session_cls)
-
-
-@router.post("/create_profile/", tags=["User Profile"], response_model=pyd_mod_common.ResponseOk)
-async def create_user_profile(
-    sub: Sub,
-    data: pyd_mod_users.UserProfileRequest,
-    session_cls: AsyncSession,
-):
-    await user.create_user_profile(sub, data, session_cls)
-    return OK
+    return await seller.retrieve_user(sub, session_cls)

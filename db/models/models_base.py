@@ -92,3 +92,19 @@ class Category(Base):
         default=_uuid,
     )
     name = sa.Column("name", sa.String(255), unique=True, nullable=False)
+
+
+class Product(Base):
+    __tablename__ = "products"
+
+    pk = sa.Column(
+        "pk",
+        sa.String(48),
+        unique=True,
+        nullable=False,
+        primary_key=True,
+        default=_uuid,
+    )
+    name = sa.Column("name", sa.String(255), unique=True, nullable=False)
+    price = sa.Column("price", sa.DECIMAL(precision=10, scale=2), nullable=False)
+    available_count = sa.Column("available_count", sa.Integer(), nullable=False, default=0)

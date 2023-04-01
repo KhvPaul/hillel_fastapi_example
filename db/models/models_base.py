@@ -3,7 +3,6 @@ import uuid
 
 import sqlalchemy as sa
 from sqlalchemy.ext import declarative
-from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
 from pydentic_models import enums
@@ -135,3 +134,23 @@ class CategoryToProduct(Base):
         unique=False,
         nullable=False,
     )
+
+
+class Order(Base):
+    __tablename__ = "orders"
+
+    pk = sa.Column(
+        "pk",
+        sa.String(48),
+        unique=True,
+        nullable=False,
+        primary_key=True,
+        default=_uuid,
+    )
+    customer_sub = sa.Column(
+        "customer_pk",
+        sa.ForeignKey("customers.sub", ondelete="CASCADE"),
+        nullable=False,
+    )
+    total_price = sa.Column("total_price", sa.DECIMAL(precision=10, scale=2), nullable=False)
+    created_at = sa.Column("created_at", sa.DateTime, default=datetime.datetime.utcnow)

@@ -154,3 +154,27 @@ class Order(Base):
     )
     total_price = sa.Column("total_price", sa.DECIMAL(precision=10, scale=2), nullable=False)
     created_at = sa.Column("created_at", sa.DateTime, default=datetime.datetime.utcnow)
+
+
+class OrderItem(Base):
+    __tablename__ = "order_items"
+
+    pk = sa.Column(
+        "pk",
+        sa.String(48),
+        unique=True,
+        nullable=False,
+        primary_key=True,
+        default=_uuid,
+    )
+    order_pk = sa.Column(
+        "order_pk",
+        sa.ForeignKey("orders.pk", ondelete="CASCADE"),
+        nullable=False,
+    )
+    product_pk = sa.Column(
+        "product_pk",
+        sa.ForeignKey("products.pk", ondelete="CASCADE"),
+        nullable=False,
+    )
+    quantity = sa.Column("quantity", sa.Integer(), nullable=False)

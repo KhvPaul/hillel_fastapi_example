@@ -78,3 +78,17 @@ class Manufacturer(Base):
     country = sa.Column("country", sa.String(255), nullable=False)  # TODO: should be implemented as FK on Country
     phone_number = sa.Column("phone_number", sa.VARCHAR(15), nullable=False)
     mailing_address = sa.Column("mailing_address", sa.VARCHAR(1023), nullable=False)
+
+
+class Category(Base):
+    __tablename__ = "categories"
+
+    pk = sa.Column(
+        "pk",
+        sa.String(48),
+        unique=True,
+        nullable=False,
+        primary_key=True,
+        default=_uuid,
+    )
+    name = sa.Column("name", sa.String(255), unique=True, nullable=False)

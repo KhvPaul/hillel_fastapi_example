@@ -14,7 +14,9 @@ generate_uuid = lambda: _uuid()  # noqa
 
 
 class UserModelMixin(Base):
-    """ Abstract class that can't be initialized. Used to provide default User attrs (sub, email, password, etc.) """
+    """
+    Abstract class that can't be initialized. Used to provide default User attrs (sub, email, password, etc.)
+    """
 
     __abstract__ = True
 

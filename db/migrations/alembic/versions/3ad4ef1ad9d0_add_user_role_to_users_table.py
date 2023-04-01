@@ -17,6 +17,7 @@ depends_on = None
 
 
 def upgrade():
+    op.execute("CREATE TYPE userroles AS ENUM ('Seller', 'Customer');")
     op.add_column("users", sa.Column(
             "user_role",
             sa.Enum(
@@ -30,3 +31,4 @@ def upgrade():
 
 def downgrade():
     op.drop_column("users", "user_role")
+    op.execute("DROP TYPE userroles;")

@@ -20,6 +20,7 @@ def upgrade() -> None:
     op.drop_table("user_profiles")
     op.execute("DROP TYPE genders;")
     op.drop_table("users")
+    op.execute("DROP TYPE userroles;")
 
 
 def downgrade() -> None:
@@ -28,6 +29,15 @@ def downgrade() -> None:
         sa.Column("sub", sa.String(length=48), nullable=False),
         sa.Column("email", sa.String(length=320), nullable=False),
         sa.Column("password", sa.Text, nullable=False),
+        sa.Column(
+            "user_role",
+            sa.Enum(
+                "Seller",
+                "Customer",
+                name="userroles",
+            ),
+            nullable=False
+        ),
 
         sa.PrimaryKeyConstraint("sub"),
         sa.UniqueConstraint("sub"),

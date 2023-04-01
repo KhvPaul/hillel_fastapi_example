@@ -17,6 +17,7 @@ depends_on = None
 
 
 def upgrade() -> None:
+    op.execute("CREATE TYPE genders AS ENUM ('Male', 'Female', 'Other');")
     op.create_table(
         "customers",
         sa.Column("sub", sa.String(length=48), nullable=False),

@@ -14,8 +14,10 @@ _uuid = lambda: uuid.uuid4().hex  # noqa future workpiece for function
 generate_uuid = lambda: _uuid()  # noqa
 
 
-class Admin(Base):
-    __tablename__ = "admins"
+class UserModelMixin(Base):
+    """ Abstract class that can't be initialized. Used to provide default User attrs (sub, email, password, etc.) """
+
+    __abstract__ = True
 
     sub = sa.Column(
         "sub",
@@ -28,54 +30,34 @@ class Admin(Base):
     email = sa.Column("email", sa.String(320), unique=True, nullable=False)
     password = sa.Column("password", sa.Text, nullable=False)
 
-
-class User(Base):
-    __tablename__ = "users"
-
-    sub = sa.Column(
-        "sub",
-        sa.String(48),
-        unique=True,
-        nullable=False,
-        primary_key=True,
-        default=_uuid,
-    )
-    email = sa.Column("email", sa.String(320), unique=True, nullable=False)
-    password = sa.Column("password", sa.Text, nullable=False)
-    user_role = sa.Column("user_role", sa.Enum(enums.UserRoles), nullable=False)
-
-    profile = relationship("UserProfile", uselist=False, viewonly=True)
-
-
-class UserProfile(Base):
-    __tablename__ = "user_profiles"
-
-    user_sub = sa.Column(
-        "user_sub",
-        sa.ForeignKey("users.sub", ondelete="CASCADE"),
-        unique=True,
-        nullable=False,
-        primary_key=True,
-    )
-    first_name = sa.Column("first_name", sa.String(255), nullable=False)
-    last_name = sa.Column("last_name", sa.String(255), nullable=False)
-    birthday = sa.Column("birthday", sa.DATE, nullable=False)
-    gender = sa.Column("gender", sa.Enum(enums.Genders), nullable=False)
-    phone_number = sa.Column("phone_number", sa.VARCHAR(15), nullable=False)
     created_at = sa.Column("created_at", sa.DateTime, default=datetime.datetime.utcnow)
     updated_at = sa.Column(
         "updated_at", sa.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
     )
 
-    @hybrid_property
-    def email(self) -> str:
-        return self.user.email
 
-    user = relationship(
-        "User",
-        lazy="joined",
-        foreign_keys=[user_sub],
-        primaryjoin="User.sub == UserProfile.user_sub",
-        viewonly=True,
-        uselist=False,
-    )
+class UserProfileModelMixin(Base):
+    """
+    Abstract class that can't be initialized. Used to provide default UserProfile attrs (first_name, last_name, etc)
+    """
+
+    __abstract__ = True
+
+    first_name = sa.Column("first_name", sa.String(255), nullable=False)
+    last_name = sa.Column("last_name", sa.String(255), nullable=False)
+    birthday = sa.Column("birthday", sa.DATE, nullable=False)
+    gender = sa.Column("gender", sa.Enum(enums.Genders), nullable=False)
+    phone_number = sa.Column("phone_number", sa.VARCHAR(15), nullable=False)
+
+
+class Admin(UserModelMixin):
+    __tablename__ = "admins"
+
+
+class Customer(UserModelMixin, UserProfileModelMixin):
+    __tablename__ = "customers"
+
+
+class Seller(UserModelMixin, UserProfileModelMixin):
+    __tablename__ = "sellers"
+

@@ -13,7 +13,7 @@ _uuid = lambda: uuid.uuid4().hex  # noqa future workpiece for function
 generate_uuid = lambda: _uuid()  # noqa
 
 
-class UserModelMixin(Base):
+class AbstractUser(Base):
     """
     Abstract class that can't be initialized. Used to provide default User attrs (sub, email, password, etc.)
     """
@@ -37,7 +37,7 @@ class UserModelMixin(Base):
     )
 
 
-class UserProfileModelMixin(Base):
+class AbstractUserProfile(Base):
     """
     Abstract class that can't be initialized. Used to provide default UserProfile attrs (first_name, last_name, etc)
     """
@@ -51,15 +51,15 @@ class UserProfileModelMixin(Base):
     phone_number = sa.Column("phone_number", sa.VARCHAR(15), nullable=False)
 
 
-class Admin(UserModelMixin):
+class Admin(AbstractUser):
     __tablename__ = "admins"
 
 
-class Customer(UserModelMixin, UserProfileModelMixin):
+class Customer(AbstractUser, AbstractUserProfile):
     __tablename__ = "customers"
 
 
-class Seller(UserModelMixin, UserProfileModelMixin):
+class Seller(AbstractUser, AbstractUserProfile):
     __tablename__ = "sellers"
 
 

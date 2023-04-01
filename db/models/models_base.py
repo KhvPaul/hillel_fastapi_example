@@ -61,3 +61,20 @@ class Customer(UserModelMixin, UserProfileModelMixin):
 class Seller(UserModelMixin, UserProfileModelMixin):
     __tablename__ = "sellers"
 
+
+class Manufacturer(Base):
+    __tablename__ = "manufacturers"
+
+    pk = sa.Column(
+        "pk",
+        sa.String(48),
+        unique=True,
+        nullable=False,
+        primary_key=True,
+        default=_uuid,
+    )
+    email = sa.Column("email", sa.String(320), unique=True, nullable=False)
+    name = sa.Column("name", sa.String(255), unique=True, nullable=False)
+    country = sa.Column("country", sa.String(255), nullable=False)  # TODO: should be implemented as FK on Country
+    phone_number = sa.Column("phone_number", sa.VARCHAR(15), nullable=False)
+    mailing_address = sa.Column("mailing_address", sa.VARCHAR(1023), nullable=False)

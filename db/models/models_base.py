@@ -108,3 +108,30 @@ class Product(Base):
     name = sa.Column("name", sa.String(255), unique=True, nullable=False)
     price = sa.Column("price", sa.DECIMAL(precision=10, scale=2), nullable=False)
     available_count = sa.Column("available_count", sa.Integer(), nullable=False, default=0)
+
+    categories = relationship(
+        "CategoryToProduct",
+        foreign_keys="[CategoryToProduct.product_pk]",
+        primaryjoin="ProviderToSpeciality.provider_sub == ProviderProfiles.provider_sub",
+        uselist=True,
+        viewonly=True,
+        back_populates="products",
+    )
+
+
+class CategoryToProduct(Base):
+    __tablename__ = "categories_to_products"
+    __table_args__ = (sa.PrimaryKeyConstraint("category_pk", "product_pk"),)
+
+    category_pk = sa.Column(
+        "category_pk",
+        sa.ForeignKey("categories.pk", ondelete="CASCADE"),
+        unique=False,
+        nullable=False,
+    )
+    product_pk = sa.Column(
+        "product_pk",
+        sa.ForeignKey("products.pk", ondelete="CASCADE"),
+        unique=False,
+        nullable=False,
+    )

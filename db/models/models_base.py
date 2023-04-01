@@ -2,12 +2,11 @@ import datetime
 import uuid
 
 import sqlalchemy as sa
-from sqlalchemy.ext import declarative
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import declarative_base, relationship
 
 from pydentic_models import enums
 
-Base = declarative.declarative_base()
+Base = declarative_base()
 
 _uuid = lambda: uuid.uuid4().hex  # noqa future workpiece for function
 generate_uuid = lambda: _uuid()  # noqa
@@ -94,6 +93,13 @@ class Category(Base):
     )
     name = sa.Column("name", sa.String(255), unique=True, nullable=False)
 
+    products = relationship(
+        "Product",
+        secondary="categories_to_products",
+        back_populates="categories",
+        lazy="subquery",
+    )
+
 
 class Product(Base):
     __tablename__ = "products"
@@ -111,12 +117,10 @@ class Product(Base):
     available_count = sa.Column("available_count", sa.Integer(), nullable=False, default=0)
 
     categories = relationship(
-        "CategoryToProduct",
-        foreign_keys="[CategoryToProduct.product_pk]",
-        primaryjoin="ProviderToSpeciality.provider_sub == ProviderProfiles.provider_sub",
-        uselist=True,
-        viewonly=True,
+        "Category",
+        secondary="categories_to_products",
         back_populates="products",
+        lazy="subquery",
     )
 
 
@@ -150,7 +154,7 @@ class Order(Base):
         default=_uuid,
     )
     customer_sub = sa.Column(
-        "customer_pk",
+        "customer_sub",
         sa.ForeignKey("customers.sub", ondelete="CASCADE"),
         nullable=False,
     )

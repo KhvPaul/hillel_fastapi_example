@@ -2,12 +2,12 @@ import datetime
 import jwt
 
 from config import settings
-from db.models.models_base import User
+from db.models.models_base import AbstractUser
 from utils import exceptions as custom_exc, redis_api as redis
 from logger import logger
 
 
-class UserAuthHandler:
+class AuthHandler:
     @staticmethod
     def decode_user_access_token(access_token: str):
         try:
@@ -25,7 +25,7 @@ class UserAuthHandler:
             raise custom_exc.ErrorCredentialsValidation()
 
     @staticmethod
-    def generate_access_token(user: User):
+    def generate_access_token(user: AbstractUser):
         token_payload = {"sub": user.sub, "exp": datetime.datetime.now().timestamp() + 3600}
         return jwt.encode(token_payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 

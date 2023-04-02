@@ -25,7 +25,6 @@ def upgrade() -> None:
         sa.Column(
             "user_role",
             sa.Enum(
-                "Admin",
                 "Seller",
                 "Customer",
                 name="userroles",

@@ -8,6 +8,5 @@ class Genders(str, enum.Enum):
 
 
 class UserRoles(str, enum.Enum):
-    Admin = "Admin"
     Seller = "Seller"
     Customer = "Customer"

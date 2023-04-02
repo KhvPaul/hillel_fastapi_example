@@ -2,6 +2,7 @@ import datetime
 import uuid
 
 import sqlalchemy as sa
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import declarative_base, relationship
 
 from pydentic_models import enums
@@ -63,6 +64,22 @@ class AbstractUserProfile(Base):
 class Admin(AbstractUser):
     __tablename__ = "admins"
 
+    sub = sa.Column(
+        "sub",
+        sa.String(48),
+        unique=True,
+        nullable=False,
+        primary_key=True,
+        default=_uuid,
+    )
+    email = sa.Column("email", sa.String(320), unique=True, nullable=False)
+    password = sa.Column("password", sa.Text, nullable=False)
+
+    created_at = sa.Column("created_at", sa.DateTime, default=datetime.datetime.utcnow)
+    updated_at = sa.Column(
+        "updated_at", sa.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
+    )
+
 
 class User(AbstractUser):
     __tablename__ = "users"
@@ -71,9 +88,35 @@ class User(AbstractUser):
 class Customer(AbstractUserProfile):
     __tablename__ = "customers"
 
+    @hybrid_property
+    def email(self) -> str:
+        return self.user.email
+
+    user = relationship(
+        "User",
+        lazy="joined",
+        foreign_keys="[Customer.user_sub]",
+        primaryjoin="User.sub == Customer.user_sub",
+        viewonly=True,
+        uselist=False,
+    )
+
 
 class Seller(AbstractUserProfile):
     __tablename__ = "sellers"
+
+    @hybrid_property
+    def email(self) -> str:
+        return self.user.email
+
+    user = relationship(
+        "User",
+        lazy="joined",
+        foreign_keys="[Seller.user_sub]",
+        primaryjoin="User.sub == Seller.user_sub",
+        viewonly=True,
+        uselist=False,
+    )
 
 
 class Manufacturer(Base):

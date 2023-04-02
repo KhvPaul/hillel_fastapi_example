@@ -17,18 +17,12 @@ depends_on = None
 
 
 def upgrade() -> None:
-    user_role_enum = ENUM("Admin", "Seller", "Customer", name="userroles", create_type=False)
     op.create_table(
         "admins",
         sa.Column("sub", sa.String(length=48), nullable=False),
         sa.Column("email", sa.String(length=320), nullable=False),
         sa.Column("password", sa.Text, nullable=False),
-        sa.Column(
-            "user_role",
-            user_role_enum,
-            nullable=False,
-            server_default="Admin"
-        ),
+
         sa.Column("created_at", sa.DateTime(), nullable=True),
         sa.Column("updated_at", sa.DateTime(), nullable=True),
 

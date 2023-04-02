@@ -1,8 +1,8 @@
 """orders table
 
-Revision ID: ae5351576f8c
-Revises: a475e4246e90
-Create Date: 2023-04-01 16:46:28.791352
+Revision ID: 243b47ee2eb8
+Revises: a349ec0e039b
+Create Date: 2023-04-02 16:43:17.419740
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ae5351576f8c'
-down_revision = 'a475e4246e90'
+revision = '243b47ee2eb8'
+down_revision = 'a349ec0e039b'
 branch_labels = None
 depends_on = None
 
@@ -24,7 +24,7 @@ def upgrade() -> None:
         sa.Column("total_price", sa.DECIMAL(precision=10, scale=2), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=True),
 
-        sa.ForeignKeyConstraint(["customer_sub"], ["customers.sub"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(["customer_sub"], ["customers.user_sub"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("pk"),
         sa.UniqueConstraint("pk"),
     )
@@ -32,3 +32,4 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.drop_table("orders")
+

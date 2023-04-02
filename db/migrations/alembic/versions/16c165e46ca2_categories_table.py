@@ -1,8 +1,8 @@
-"""products table
+"""categories table
 
-Revision ID: cfecc27e9a73
-Revises: be5a0f222a4b
-Create Date: 2023-04-01 15:57:17.058965
+Revision ID: 16c165e46ca2
+Revises: 84561d6a015b
+Create Date: 2023-04-02 16:38:35.769136
 
 """
 from alembic import op
@@ -10,19 +10,17 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'cfecc27e9a73'
-down_revision = 'be5a0f222a4b'
+revision = '16c165e46ca2'
+down_revision = '84561d6a015b'
 branch_labels = None
 depends_on = None
 
 
 def upgrade() -> None:
     op.create_table(
-        "products",
+        "categories",
         sa.Column("pk", sa.String(length=48), nullable=False),
         sa.Column("name", sa.String(length=255), nullable=False),
-        sa.Column("price", sa.DECIMAL(precision=10, scale=2), nullable=False),
-        sa.Column("available_count", sa.Integer(), nullable=False, server_default="0"),
 
         sa.PrimaryKeyConstraint("pk"),
         sa.UniqueConstraint("pk"),
@@ -31,4 +29,4 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_table("products")
+    op.drop_table("categories")

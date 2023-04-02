@@ -30,6 +30,8 @@ class AbstractUser(Base):
     email = sa.Column("email", sa.String(320), unique=True, nullable=False)
     password = sa.Column("password", sa.Text, nullable=False)
 
+    user_role = sa.Column("user_role", sa.Enum(enums.UserRoles), nullable=False)
+
     created_at = sa.Column("created_at", sa.DateTime, default=datetime.datetime.utcnow)
     updated_at = sa.Column(
         "updated_at", sa.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
@@ -43,6 +45,14 @@ class AbstractUserProfile(Base):
 
     __abstract__ = True
 
+    user_sub = sa.Column(
+        "user_sub",
+        sa.ForeignKey("users.sub", ondelete="CASCADE"),
+        unique=True,
+        nullable=False,
+        primary_key=True,
+    )
+
     first_name = sa.Column("first_name", sa.String(255), nullable=False)
     last_name = sa.Column("last_name", sa.String(255), nullable=False)
     birthday = sa.Column("birthday", sa.DATE, nullable=False)
@@ -54,11 +64,15 @@ class Admin(AbstractUser):
     __tablename__ = "admins"
 
 
-class Customer(AbstractUser, AbstractUserProfile):
+class User(AbstractUser):
+    __tablename__ = "users"
+
+
+class Customer(AbstractUserProfile):
     __tablename__ = "customers"
 
 
-class Seller(AbstractUser, AbstractUserProfile):
+class Seller(AbstractUserProfile):
     __tablename__ = "sellers"
 
 
@@ -116,6 +130,20 @@ class Product(Base):
     price = sa.Column("price", sa.DECIMAL(precision=10, scale=2), nullable=False)
     available_count = sa.Column("available_count", sa.Integer(), nullable=False, default=0)
 
+    manufacturer_pk = sa.Column(
+        "manufacturer_pk",
+        sa.ForeignKey("manufacturers.pk", ondelete="CASCADE"),
+        unique=False,
+        nullable=False,
+    )
+
+    seller_sub = sa.Column(
+        "seller_sub",
+        sa.ForeignKey("sellers.user_sub", ondelete="CASCADE"),
+        unique=False,
+        nullable=False,
+    )
+
     categories = relationship(
         "Category",
         secondary="categories_to_products",
@@ -155,7 +183,7 @@ class Order(Base):
     )
     customer_sub = sa.Column(
         "customer_sub",
-        sa.ForeignKey("customers.sub", ondelete="CASCADE"),
+        sa.ForeignKey("customers.user_sub", ondelete="CASCADE"),
         nullable=False,
     )
     total_price = sa.Column("total_price", sa.DECIMAL(precision=10, scale=2), nullable=False)

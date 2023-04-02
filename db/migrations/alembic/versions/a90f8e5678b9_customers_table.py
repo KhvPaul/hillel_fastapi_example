@@ -1,8 +1,8 @@
 """customers table
 
-Revision ID: a76d9fe85d82
-Revises: f45a1978a73f
-Create Date: 2023-04-01 15:00:29.328552
+Revision ID: a90f8e5678b9
+Revises: a6e4fdebba09
+Create Date: 2023-04-02 16:25:20.827038
 
 """
 from alembic import op
@@ -10,22 +10,16 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a76d9fe85d82'
-down_revision = 'f45a1978a73f'
+revision = 'a90f8e5678b9'
+down_revision = 'a6e4fdebba09'
 branch_labels = None
 depends_on = None
 
 
 def upgrade() -> None:
-    op.execute("CREATE TYPE genders AS ENUM ('Male', 'Female', 'Other');")
     op.create_table(
         "customers",
-        sa.Column("sub", sa.String(length=48), nullable=False),
-        sa.Column("email", sa.String(length=320), nullable=False),
-        sa.Column("password", sa.Text, nullable=False),
-
-        sa.Column("created_at", sa.DateTime(), nullable=True),
-        sa.Column("updated_at", sa.DateTime(), nullable=True),
+        sa.Column("user_sub", sa.String(length=48), nullable=False),
 
         sa.Column("first_name", sa.String(length=255), nullable=False),
         sa.Column("last_name", sa.String(length=255), nullable=False),
@@ -42,9 +36,9 @@ def upgrade() -> None:
         ),
         sa.Column("phone_number", sa.VARCHAR(length=15), nullable=False),
 
-        sa.PrimaryKeyConstraint("sub"),
-        sa.UniqueConstraint("sub"),
-        sa.UniqueConstraint("email"),
+        sa.ForeignKeyConstraint(["user_sub"], ["users.sub"], ondelete="CASCADE"),
+        sa.PrimaryKeyConstraint("user_sub"),
+        sa.UniqueConstraint("user_sub"),
     )
 
 

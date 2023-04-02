@@ -1,8 +1,8 @@
 """manufacturers table
 
-Revision ID: 9ed1270818ee
-Revises: 0934d2f9f564
-Create Date: 2023-04-01 15:18:43.215027
+Revision ID: 84561d6a015b
+Revises: b8f257171527
+Create Date: 2023-04-02 16:37:28.472350
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9ed1270818ee'
-down_revision = '0934d2f9f564'
+revision = '84561d6a015b'
+down_revision = 'b8f257171527'
 branch_labels = None
 depends_on = None
 

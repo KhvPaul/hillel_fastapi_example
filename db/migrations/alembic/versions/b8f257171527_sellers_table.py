@@ -1,41 +1,33 @@
-"""user_profiles_table
+"""sellers table
 
-Revision ID: e766fea769d5
-Revises: aa3921a64312
-Create Date: 2023-03-25 09:12:49.503616
+Revision ID: b8f257171527
+Revises: a90f8e5678b9
+Create Date: 2023-04-02 16:31:30.628273
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy.dialects.postgresql import ENUM
 
 # revision identifiers, used by Alembic.
-revision = 'e766fea769d5'
-down_revision = 'aa3921a64312'
+revision = 'b8f257171527'
+down_revision = 'a90f8e5678b9'
 branch_labels = None
 depends_on = None
 
 
 def upgrade() -> None:
+    gender_enum = ENUM("Male", "Female", "Other", name="genders", create_type=False)
+
     op.create_table(
-        "user_profiles",
+        "sellers",
         sa.Column("user_sub", sa.String(length=48), nullable=False),
+
         sa.Column("first_name", sa.String(length=255), nullable=False),
         sa.Column("last_name", sa.String(length=255), nullable=False),
         sa.Column("birthday", sa.DATE(), nullable=False),
-        sa.Column(
-            "gender",
-            sa.Enum(
-                "Male",
-                "Female",
-                "Other",
-                name="genders",
-            ),
-            nullable=False
-        ),
+        sa.Column("gender", gender_enum, nullable=False),
         sa.Column("phone_number", sa.VARCHAR(length=15), nullable=False),
-        sa.Column("created_at", sa.DateTime(), nullable=True),
-        sa.Column("updated_at", sa.DateTime(), nullable=True),
 
         sa.ForeignKeyConstraint(["user_sub"], ["users.sub"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("user_sub"),
@@ -44,5 +36,4 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_table("user_profiles")
-    op.execute("DROP TYPE genders;")
+    op.drop_table("sellers")

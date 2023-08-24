@@ -28,3 +28,4 @@ Example project for hillel IT school.
     ```bash 
     python create_admin.py admin@noreply.com admin
     ```
+  
